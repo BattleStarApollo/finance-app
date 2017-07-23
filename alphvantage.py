@@ -49,7 +49,7 @@ begin_time = ''
 end_time = ''
 
 ts = TimeSeries(key='G9RVRT562GWL8YZB', output_format='pandas')
-data, meta_data = ts.get_daily_adjusted(symbol=ticker, outputsize='full')
+data, meta_data = ts.get_daily_adjusted(symbol=ticker, outputsize='compact')
 
 def return_dates():
 
