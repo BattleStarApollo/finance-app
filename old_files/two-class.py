@@ -34,23 +34,6 @@ from dateutil.relativedelta import relativedelta
 from get_finance_data import GetData
 
 
-
-#
-# Need to make time intervals and ability to choose time windows
-#
-# Intervals:
-#   YTD
-#   Last 3 months
-#   Last 6 Months
-#   Last 12 months
-#   Last 3 Years
-#   Last Five Years
-#   Last Ten Years
-#
-#
-#   Start Date, End Date
-#
-
 def TranslateDates(data):
 
     def ConvertPandaDT(string):

@@ -70,3 +70,27 @@ print sizes_dict
 #         age -= 1
 #
 #     return age
+
+# import matplotlib.pyplot as plt
+#
+# ts = TimeSeries(key='G9RVRT562GWL8YZB', output_format='pandas')
+# data, meta_data = ts.get_intraday(symbol='VFIFX',interval='60min', outputperiod='full')
+# data['close'].plot()
+# plt.title('Intraday Times Series for the MSFT stock (1 min)')
+# plt.show()
+#
+# from alpha_vantage.globalstockquotes import GlobalStockQuotes
+# from pprint import pprint
+#
+# gsq = GlobalStockQuotes(key='486U')
+# data, meta_data = gsq.get_global_quote(symbol="ETR:DB1")
+# pprint(data)
+
+# from alpha_vantage.timeseries import TimeSeries
+# import matplotlib.pyplot as plt
+#
+# ts = TimeSeries(key='G9RVRT562GWL8YZB', output_format='pandas')
+# data, meta_data = ts.get_daily(symbol='VFIFX', outputperiod='full')
+# data['close'].plot()
+# plt.title('Intraday Times Series for the MSFT stock (1 min)')
+# plt.show()
