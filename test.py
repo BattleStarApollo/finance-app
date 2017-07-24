@@ -1,6 +1,6 @@
-from get_finance_data import GetData
-from build_profile import Build
-
+# from get_finance_data import GetData
+# from build_profile import Build
+from datetime import date
 
 ticker = 'SPX'
 size = 'full'
@@ -26,8 +26,30 @@ size = 'full'
 # print t.size
 # print t.myint
 # print t.data
-t = Build(ticker,size)
-print t.ticker
+# t = Build(ticker,size)
+# print t.ticker
+
+
+
+# sizes = ['ytd','thmon','sixmon','twmon','thyr', 'fiyr', 'teyr','start','end','all']
+# 1. convert dates to start dates and end dates
+# 2. check if in bounds
+# 3. create class data profile with raw data
+# 4. create class
+
+sizes_dict = {
+    'ytd': {'start': str(date(date.today().year, 1, 1)), 'end': str(date.today()},
+}
+
+
+print sizes_dict
+
+
+
+
+
+
+
 
 
 #

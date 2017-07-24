@@ -33,24 +33,7 @@ from datetime import date
 from get_finance_data import GetData
 
 ticker = 'VGSTX'
-size = 'full'
 
-
-#
-# Need to make time intervals and ability to choose time windows
-#
-# Intervals:
-#   YTD
-#   Last 3 months
-#   Last 6 Months
-#   Last 12 months
-#   Last 3 Years
-#   Last Five Years
-#   Last Ten Years
-#
-#
-#   Start Date, End Date
-#
 
 def TranslateDates(data):
 
@@ -76,18 +59,17 @@ def PerPeriod(data):
         this_prrr = 0
     return prrr, prr
 
-def PrettyPrint(profile):
-     print "Ticker: " + profile.ticker
-     print "Size: " + profile.size
-     print "Start Date: " + profile.DateTime.start_date
-     print "End Date: " + profile.DateTime.end_date
-     print "Number of Days in Period: " + str(profile.DateTime.period_days)
-     print "Number of Years in Period: " + str(profile.DateTime.period_years)
-     print profile.income_total
-     print profile.hprr
-    #  print profile.prrr, profile.prr
+# def PrettyPrint(profile):
+#      print "Ticker: " + profile.ticker
+#      print "Start Date: " + profile.DateTime.start_date
+#      print "End Date: " + profile.DateTime.end_date
+#      print "Number of Days in Period: " + str(profile.DateTime.period_days)
+#      print "Number of Years in Period: " + str(profile.DateTime.period_years)
+#      print profile.income_total
+#      print profile.hprr
+#      print profile.prrr, profile.prr
 
-class Profile:
+class ProfileRawData:
 
     class DateTime:
         start_date = ""
@@ -95,11 +77,11 @@ class Profile:
         period_days = 0
         period_years = 0
 
-    def __init__(self,ticker,size):
+    def __init__(self,ticker):
         self.ticker = ticker
-        self.size = size
         self.data, self.meta_data = GetData(ticker)
         self.DateTime.start_date, self.DateTime.end_date, self.DateTime.period_days, self.DateTime.period_years = TranslateDates(self.data)
+
         self.income_total = np.sum(self.data['dividend amount'])
         self.hprr = (self.income_total + self.data['close'].iloc[-1])/self.data['close'].iloc[0]
         self.prrr, self.prr = PerPeriod(self.data)
@@ -109,15 +91,56 @@ class Profile:
 
 
 
-def Build(ticker,size):
-    return Profile(ticker,size)
+
+
+
+#
+# Need to make time intervals and ability to choose time windows
+#
+# Intervals:
+#   YTD
+#   Last 3 months
+#   Last 6 Months
+#   Last 12 months
+#   Last 3 Years
+#   Last Five Years
+#   Last Ten Years
+#
+#
+#   Start Date, End Date
+#
+#
+# size = {'ytd','3mon','6mon','12mon','3yr', '5yr', '10yr','start','end'}
+#
+# def Intervals(profile, size):
+
+# def TimeTransformData(profile, size):
+#
+
+    # return data['close'] for interval
+
+
+
+
+class Profile:
+    def __init__(self, ticker, size):
+        self.profile_raw_data = ProfileRawData(ticker)
+        self.data = TimeTransformData(self.profile_raw_data, size)
+
+
+
+
+# size = {'ytd','3mon','6mon','12mon','3yr', '5yr', '10yr','start','end'}
+
+size = 'ytd'
+def Build(ticker, size):
+    return Profile(ticker, size)
+
 
 instance = Build(ticker,size)
-PrettyPrint(instance)
-
-
-
-# t = Profile(ticker,size)
+# PrettyPrint(instance)
+print instance.profile_raw_data.ticker
+# t = ProfileRawData(ticker,size)
 # print t.ticker
 # print t.size
 # print t.data
