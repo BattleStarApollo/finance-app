@@ -6,21 +6,21 @@ from dateutil.relativedelta import relativedelta
 from get_finance_data import GetData
 
 
+def ConvertPandaDT(string):
+    year = string[0:4]
+    month = string[5:7]
+    day = string[8:10]
+    print year, month, day
+    dt = date(int(year), int(month), int(day))
+    return dt
+
 '''
 AllTickerData : Class holding all available daily data for the given ticker
 '''
 
-
 class AllTickerData:
 
     def TranslateDates(self, data):
-        def ConvertPandaDT(string):
-            year = string[0:4]
-            month = string[5:7]
-            day = string[8:]
-            dt = date(int(year), int(month), int(day))
-            return dt
-
         a = ConvertPandaDT(data.index.values[0])
         b = ConvertPandaDT(data.index.values[-1])
         return data.index.values[0], data.index.values[-1], float((b-a).days), float((b-a).days)/365.25
@@ -99,6 +99,7 @@ def PrettyPrint2(periodtickermetric):
      print "Geometric Mean Return: " + str(periodtickermetric.gmr)
     #  print periodtickermetric.prrr, periodtickermetric.prr
 
+
 periods_dict_begin_dates = {
     'ytd': str(date(date.today().year, 1, 1)),
     'thmon': str(date.today() - relativedelta(months=+3)),
@@ -107,41 +108,49 @@ periods_dict_begin_dates = {
     'fiyr': str(date.today() - relativedelta(years=+5)),
     'teyr': str(date.today() - relativedelta(years=+10)),
 }
-# Sends in one string period choices, returns corrected version
-
-def TranslateD(alltickerdata, period):
-    start_claim = periods_dict_begin_dates[period]
-    if period == 'all':
-        start = alltickerdata.DateTime.start_date
-        end = alltickerdata.DateTime.end_date
-    elif start_claim < alltickerdata.DateTime.start_date:
-        # print  "no"
-        # print("earliest date", alltickerdataDateTime.start_date)
-        start = 'null'
-        end = 'null'
-    else:
-        start = periods_dict_begin_dates[period]
-        end = alltickerdata.DateTime.end_date
-        # print period, start, end
-    return start, end
 
 def Build(ticker, periods):
+
+    # Translates period in string form to date form
+    def TranslateD(alltickerdata, period):
+        start_claim = periods_dict_begin_dates[period]
+        if period == 'all':
+            start = alltickerdata.DateTime.start_date
+            end = alltickerdata.DateTime.end_date
+        elif start_claim < alltickerdata.DateTime.start_date:
+            # print  "no"
+            # print("earliest date", alltickerdataDateTime.start_date)
+            start = 'null'
+            end = 'null'
+        else:
+            start = periods_dict_begin_dates[period]
+            end = alltickerdata.DateTime.end_date
+            # print period, start, end
+        return start, end
+
+    # Get AllTickerData
     alltickerdata = AllTickerData(ticker)
 
-    # List_PeriodTickerMetrics a list of pp_AllTickerDatas for existing periods
-    List_PeriodTickerMetrics = []
+    # For Each Period, Get PeriodTickerMetic
+    # Return nothing periods that are out of range
     for period in periods:
-        a, b = TranslateD(alltickerdata, period)
-        # print a, b
-        if a != 'null':
-            periodtickermetric = PeriodTickerMetic(alltickerdata, a, b)
-            # print periodtickermetric.ticker
-            PrettyPrint2(periodtickermetric)
+        if int(period) and str(ConvertPandaDT(period)) > alltickerdata.DateTime.start_date:
+            periodtickermetric = PeriodTickerMetic(alltickerdata,
+                str(period[:4] + "-" + period[4:6] + "-" + period[6:8]),
+                str(period[8:12] + "-" + period[12:14] + "-" + period[14:]))
+        else:
+            if not int(period):
+                a, b = TranslateD(alltickerdata, period)
+                if a != 'null':
+                    periodtickermetric = PeriodTickerMetic(alltickerdata, a, b)
+                    # print periodtickermetric.ticker
+                    PrettyPrint2(periodtickermetric)
 
     return alltickerdata
 
 # periods = ['ytd','thmon','sixmon','twmon','thyr', 'fiyr', 'teyr','start','end','all']
 # periods = ['ytd','thmon','sixmon','onyr']
-# ticker = 'VGSTX'
+periods = ['2016010220170725']
+ticker = 'SNAP'
 
-# instance = Build(ticker,periods)
+instance = Build(ticker,periods)
