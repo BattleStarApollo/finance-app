@@ -138,8 +138,10 @@ def Build(ticker, periods):
             # print periodtickermetric.ticker
             PrettyPrint2(periodtickermetric)
 
-# periods = ['ytd','thmon','sixmon','twmon','thyr', 'fiyr', 'teyr','start','end','all']
-periods = ['ytd','thmon','sixmon','onyr']
-ticker = 'VGSTX'
+    return alltickerdata
 
-instance = Build(ticker,periods)
+# periods = ['ytd','thmon','sixmon','twmon','thyr', 'fiyr', 'teyr','start','end','all']
+# periods = ['ytd','thmon','sixmon','onyr']
+# ticker = 'VGSTX'
+
+# instance = Build(ticker,periods)
