@@ -1,4 +1,4 @@
-
+import re
 import numpy as np
 from datetime import date
 from dateutil.relativedelta import relativedelta
@@ -10,7 +10,7 @@ def ConvertPandaDT(string):
     year = string[0:4]
     month = string[5:7]
     day = string[8:10]
-    print year, month, day
+    # print year, month, day
     dt = date(int(year), int(month), int(day))
     return dt
 
@@ -134,13 +134,16 @@ def Build(ticker, periods):
     # For Each Period, Get PeriodTickerMetic
     # Return nothing periods that are out of range
     for period in periods:
-        if int(period) and str(ConvertPandaDT(period)) > alltickerdata.DateTime.start_date:
+        regexp = re.compile(r'\d+')
+        if regexp.search(period) and str(ConvertPandaDT(period)) > alltickerdata.DateTime.start_date:
             periodtickermetric = PeriodTickerMetic(alltickerdata,
                 str(period[:4] + "-" + period[4:6] + "-" + period[6:8]),
                 str(period[8:12] + "-" + period[12:14] + "-" + period[14:]))
+            PrettyPrint2(periodtickermetric)
         else:
-            if not int(period):
+            if not regexp.search(period):
                 a, b = TranslateD(alltickerdata, period)
+                print a
                 if a != 'null':
                     periodtickermetric = PeriodTickerMetic(alltickerdata, a, b)
                     # print periodtickermetric.ticker
@@ -150,7 +153,7 @@ def Build(ticker, periods):
 
 # periods = ['ytd','thmon','sixmon','twmon','thyr', 'fiyr', 'teyr','start','end','all']
 # periods = ['ytd','thmon','sixmon','onyr']
-periods = ['2016010220170725']
-ticker = 'SNAP'
+periods = ['2016010220170725','sixmon']
+ticker = 'SPX'
 
 instance = Build(ticker,periods)
